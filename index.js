@@ -32,10 +32,10 @@ app.get('/cars/:id', (req, res) => {
 })
 
 //post cars
-app.post('/cars', upload, (req, res) => {
+app.post('/addCar', upload, (req, res) => {
   const fileBase64 = req.file.buffer.toString('base64');
   const file = `data:${req.file.mimetype};base64,${fileBase64}`;
-
+  console.log(file)
   cloudinary.uploader.upload(file, function (err, result) {
     if (!!err) {
       console.log(err)
@@ -50,6 +50,35 @@ app.post('/cars', upload, (req, res) => {
       image: result.url
     })
       .then(car => {
+        res.status(201).redirect('http://localhost:8000/')
+      })
+      .catch(err => {
+        res.status(422).json('cant create car')
+      })
+  })
+})
+
+// put cars
+app.put('/cars/:id', upload, (req, res) => {
+  const fileBase64 = req.file.buffer.toString('base64');
+  const file = `data:${req.file.mimetype};base64,${fileBase64}`;
+
+  cloudinary.uploader.upload(file, function (err, result) {
+    if (!!err) {
+      console.log(err)
+      return res.status(400).json({
+        message: "gagal"
+      })
+    }
+    Cars.update({
+      name: req.body.name,
+      price: req.body.price,
+      size: req.body.size,
+      image: result.url
+    }, {
+      where: { id: req.params.id }
+    })
+      .then(car => {
         res.status(201).json({
           message: "sukses",
           data: car
@@ -59,26 +88,6 @@ app.post('/cars', upload, (req, res) => {
         res.status(422).json('cant create car')
       })
   })
-
-})
-
-// put cars
-app.put('/cars/:id', (req, res) => {
-  const url = `/uploads/${req.file.filename}`
-  Cars.update({
-    name: req.body.name,
-    price: req.body.price,
-    size: req.body.size,
-    image: url
-  }, {
-    where: { id: req.params.id }
-  })
-    .then(car => {
-      res.status(201).json(car)
-    })
-    .catch(err => {
-      res.status(422).json('can update car')
-    })
 })
 
 // put endpoint upload file
