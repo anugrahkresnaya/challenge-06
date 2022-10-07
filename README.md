@@ -48,4 +48,4 @@ list car
   ```
 - run the server
   ```
-  npm dev or yarn dev
+  npm start or yarn start
