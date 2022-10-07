@@ -59,34 +59,14 @@ app.post('/addCar', upload, (req, res) => {
 })
 
 // put cars
-app.put('/cars/:id', upload, (req, res) => {
-  const fileBase64 = req.file.buffer.toString('base64');
-  const file = `data:${req.file.mimetype};base64,${fileBase64}`;
+app.put('/cars/:id', (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
 
-  cloudinary.uploader.upload(file, function (err, result) {
-    if (!!err) {
-      console.log(err)
-      return res.status(400).json({
-        message: "gagal"
-      })
-    }
-    Cars.update({
-      name: req.body.name,
-      price: req.body.price,
-      size: req.body.size,
-      image: result.url
-    }, {
-      where: { id: req.params.id }
-    })
-      .then(car => {
-        res.status(201).json({
-          message: "sukses",
-          data: car
-        })
-      })
-      .catch(err => {
-        res.status(422).json('cant create car')
-      })
+  Cars.update(body, { where: { 'id': id } }).then(cars => {
+      res.status(200).json(cars)
+  }).catch(err => {
+      res.status(500).json(err)
   })
 })
 
