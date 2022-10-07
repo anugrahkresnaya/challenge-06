@@ -22,3 +22,30 @@ create car
 list car
 
 ![image](https://user-images.githubusercontent.com/55924803/194551022-ded5183d-2358-4c56-8c2d-4b45ae91d421.png)
+
+## packages
+- cloudinary
+- express
+- multer
+- nodemon
+- pg
+- sequelize
+
+## Step to run
+- clone the repositories
+  ```
+  git clone https://github.com/anugrahkresnaya/challenge-05.git
+  ```
+- install the dependencies
+  ```
+  npm install or yarn install
+  ```
+- set config for database
+  ```
+  setting config.json
+  sequelize db:create
+  sequelize db:migrate
+  ```
+- run the server
+  ```
+  npm dev or yarn dev
