@@ -32,29 +32,14 @@ app.get('/cars/:id', (req, res) => {
 })
 
 //post cars
-app.post('/addCar', upload, (req, res) => {
-  const fileBase64 = req.file.buffer.toString('base64');
-  const file = `data:${req.file.mimetype};base64,${fileBase64}`;
-  console.log(file)
-  cloudinary.uploader.upload(file, function (err, result) {
-    if (!!err) {
-      console.log(err)
-      return res.status(400).json({
-        message: "gagal"
-      })
-    }
-    Cars.create({
-      name: req.body.name,
-      price: req.body.price,
-      size: req.body.size,
-      image: result.url
-    })
-      .then(car => {
-        res.status(201).redirect('http://localhost:8000/')
-      })
-      .catch(err => {
-        res.status(422).json('cant create car')
-      })
+app.post('/cars', (req, res) => {
+  const body = req.body;
+
+  Cars.create(body).then(car => {
+    res.status(200).json(car);
+  })
+  .catch(err => {
+    res.status(500).json(err);
   })
 })
 
