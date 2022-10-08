@@ -6,6 +6,10 @@
 ## Link
 http://localhost:8002/
 
+Link to Frontend: http://localhost:8000/
+
+Frontend Repository: https://github.com/anugrahkresnaya/challenge-05
+
 ## Endpoint for Frontend
 - Get all cars: /
 - Get car by id: /cars/:id
