@@ -1,3 +1,4 @@
+const { car } = require('.');
 const carService = require('../../../services/carService');
 
 module.exports = {
@@ -43,7 +44,7 @@ module.exports = {
 
     carService
       .update(body, id)
-      .then(() => {
+      .then(car => {
         res.status(200).json({
           status: "OK",
           car
