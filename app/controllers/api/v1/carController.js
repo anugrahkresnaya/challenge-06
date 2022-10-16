@@ -43,7 +43,7 @@ module.exports = {
 
     carService
       .update(body, id)
-      .then(() => {
+      .then(car => {
         res.status(200).json({
           status: "OK",
           car
