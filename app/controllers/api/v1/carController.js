@@ -1,8 +1,9 @@
-const { Cars } = require('../../../models');
+const carService = require('../../../services/carService');
 
 module.exports = {
   list(req, res) {
-    Cars.findAll()
+    carService
+      .list()
       .then(cars => {
         res.status(200).json({
           status: "OK",
@@ -19,7 +20,9 @@ module.exports = {
 
   create(req, res) {
     const body = req.body;
-    Cars.create(body)
+
+    carService
+      .create(body)
       .then(car => {
         res.status(201).json({
           status: "created",
@@ -35,10 +38,11 @@ module.exports = {
   },
 
   update(req, res) {
-    const car = req.car;
+    const id = req.params.id;
     const body = req.body
 
-    car.update(body)
+    carService
+      .update(body, id)
       .then(() => {
         res.status(200).json({
           status: "OK",
@@ -54,9 +58,10 @@ module.exports = {
   },
 
   destroy(req, res) {
-    const car = req.car;
+    const id = req.params.id;
 
-    car.destroy()
+    carService
+      .delete(id)
       .then(() => {
         res.status(204).end()
       })
@@ -69,9 +74,10 @@ module.exports = {
   },
 
   getCar(req, res) {
-    Cars.findOne({
-      where: { id: req.params.id }
-    })
+    carService
+      .getById({
+        where: { id: req.params.id }
+      })
       .then(car => {
         res.status(200).json(car)
       })
@@ -84,9 +90,10 @@ module.exports = {
   },
 
   setCar(req, res, next) {
-    Cars.findOne({
-      where: { id: req.params.id }
-    })
+    carService
+      .getById({
+        where: { id: req.params.id }
+      })
       .then(car => {
         if (!car) {
           res.status(404).json({

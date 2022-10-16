@@ -1,4 +1,4 @@
-const car = require('./car');
+const car = require('./carController');
 
 module.exports = {
   car,
