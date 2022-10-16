@@ -1,4 +1,3 @@
-const { car } = require('.');
 const carService = require('../../../services/carService');
 
 module.exports = {
