@@ -68,8 +68,25 @@ module.exports = {
       })
   },
 
+  getCar(req, res) {
+    Cars.findOne({
+      where: { id: req.params.id }
+    })
+      .then(car => {
+        res.status(200).json(car)
+      })
+      .catch(err => {
+        res.status(404).json({
+          status: "FAIL",
+          message: err.message
+        })
+      })
+  },
+
   setCar(req, res, next) {
-    Cars.findByPK(req.params.id)
+    Cars.findOne({
+      where: { id: req.params.id }
+    })
       .then(car => {
         if (!car) {
           res.status(404).json({
