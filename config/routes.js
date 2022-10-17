@@ -45,6 +45,16 @@ apiRouter.delete(
   controllers.api.v1.user.destroy
 );
 
+// user auth
+apiRouter.post(
+  '/api/v1/register',
+  controllers.api.v1.auth.register
+);
+apiRouter.post(
+  '/api/v1/login',
+  controllers.api.v1.auth.login
+);
+
 // error handler
 apiRouter.get('/api/v1/errors', () => {
   throw new Error(
