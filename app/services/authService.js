@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const userRepository = require('../repositories/authRepository');
 const jwt = require('jsonwebtoken');
+const authRepository = require('../repositories/authRepository');
 
 async function encryptPassword(password) {
   try {
@@ -20,8 +21,14 @@ async function comparePassword(password, encryptedPassword) {
   }
 }
 
+const SECRET_KEY = 'secretKey'
+
 function createToken(payload) {
-  return jwt.sign(payload, 'secretKey');
+  return jwt.sign(payload, SECRET_KEY);
+}
+
+function verifyToken(token) {
+  return jwt.verify(token, SECRET_KEY);
 }
 
 module.exports = {
@@ -73,4 +80,18 @@ module.exports = {
       throw err;
     };
   },
+
+  async authorize(token) {
+    try {
+      const payload = verifyToken(token);
+
+      const id = payload?.id;
+  
+      const user = await authRepository.findUserByPk(id);
+  
+      return user; 
+    } catch (err) {
+      throw err;
+    }
+  }
 }

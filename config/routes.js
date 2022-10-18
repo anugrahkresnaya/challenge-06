@@ -29,6 +29,7 @@ apiRouter.delete(
 // users router
 apiRouter.get(
   '/api/v1/users',
+  controllers.api.v1.auth.authorize,
   controllers.api.v1.user.list
 );
 apiRouter.post(
@@ -53,6 +54,11 @@ apiRouter.post(
 apiRouter.post(
   '/api/v1/login',
   controllers.api.v1.auth.login
+);
+apiRouter.get(
+  '/api/v1/currentUser',
+  controllers.api.v1.auth.authorize,
+  controllers.api.v1.auth.currentUser
 );
 
 // error handler
