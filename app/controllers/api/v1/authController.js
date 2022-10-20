@@ -3,10 +3,58 @@ const authService = require('../../../services/authService');
 
 module.exports = {
   register(req, res) {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     authService
-      .register(email, password)
+      .register(email, password, role)
+      .then(user => {
+        res.status(201).json({
+          status: "OK",
+          data: user
+        });
+      })
+      .catch(err => {
+        res.status(400).json({
+          status: "FAIL",
+          message: err.message
+        });
+      });
+  },
+
+  registerAdmin(req, res) {
+    const { email, password, role } = req.body;
+
+    authService
+      .registerAdmin(email, password, role)
+      .then(user => {
+        const isSuperAdmin = req.user.role
+
+        if (isSuperAdmin !== "super admin") {
+          res.status(401).json({
+            status: "FAIL",
+            message: "Unauthorized because only super admin can add admin"
+          })
+          return;
+        }
+
+        res.status(201).json({
+          status: "OK",
+          data: user
+        });
+      })
+      .catch(err => {
+        res.status(400).json({
+          status: "FAIL",
+          message: err.message
+        });
+      });
+  },
+
+  registerMember(req, res) {
+    const { email, password, role } = req.body;
+
+    authService
+      .registerMember(email, password, role)
       .then(user => {
         res.status(201).json({
           status: "OK",
@@ -47,5 +95,44 @@ module.exports = {
           message: err.message
         });
       });
+  },
+
+  authorize(req, res, next) {
+    const Bearer = req.headers.authorization;
+    if (!Bearer) {
+      res.status(403).json({
+        message: "Unauthorized"
+      })
+      return;
+    }
+
+    const token = Bearer.split('Bearer ')[1];
+
+    authService
+      .authorize(token)
+      .then(user => {
+        if (!user) {
+          res.status(403).json({
+            message: "Unauthorized"
+          });
+        }
+
+        req.user = user;
+        next();
+      })
+      .catch(err => {
+        res.status(403).json({
+          message: "Unauthorized"
+        })
+      });
+  },
+
+  currentUser(req, res) {
+    const user = req.user;
+
+    res.status(201).json({
+      status: "OK",
+      data: user
+    });
   }
 };
