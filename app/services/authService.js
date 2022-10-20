@@ -32,15 +32,50 @@ function verifyToken(token) {
 }
 
 module.exports = {
-  async register(email, password) {
+  async register(email, password, role) {
     try {
       const encryptedPassword = await encryptPassword(password);
       const body = {
         email,
-        password: encryptedPassword
+        password: encryptedPassword,
+        role
       }
       const user = await userRepository.create(body);
 
+      return user;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  async registerMember(email, password, role) {
+    try {
+      const encryptedPassword = await encryptPassword(password);
+
+      const body = {
+        email,
+        password: encryptedPassword,
+        role: "member"
+      }
+      const user = await userRepository.create(body);
+
+      return user;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  async registerAdmin(email, password, role) {
+    try {
+      const encryptedPassword = await encryptPassword(password);
+
+      const body = {
+        email,
+        password: encryptedPassword,
+        role: "admin"
+      }
+
+      const user = await userRepository.create(body);
       return user;
     } catch (err) {
       throw err;
@@ -68,6 +103,7 @@ module.exports = {
       const token = createToken({
         id: user.id,
         email: user.email,
+        role: user.role,
       })
 
       const data = {
@@ -86,10 +122,10 @@ module.exports = {
       const payload = verifyToken(token);
 
       const id = payload?.id;
-  
+
       const user = await authRepository.findUserByPk(id);
-  
-      return user; 
+
+      return user;
     } catch (err) {
       throw err;
     }
