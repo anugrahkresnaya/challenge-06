@@ -7,6 +7,10 @@ module.exports = {
     return car;
   },
 
+  listByTrue() {
+    return carRepository.findByAvailableIsTrue();
+  },
+
   create(reqBody) {
     return carRepository.create(reqBody);
   },
@@ -15,8 +19,18 @@ module.exports = {
     return carRepository.update(reqBody, id);
   },
 
-  delete(id) {
-    return carRepository.delete(id);
+  delete(payload, id) {
+    return carRepository.delete(payload, id);
+  },
+
+  async softDelete(payload, id) {
+    try {
+      const car = await carRepository.softDelete(payload, id)
+
+      return car;
+    } catch (err) {
+      throw err;
+    }
   },
 
   getById(id) {

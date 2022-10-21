@@ -5,8 +5,7 @@ const apiRouter = express.Router();
 // cars router
 apiRouter.get(
   '/api/v1/cars',
-  controllers.api.v1.auth.authorize,
-  controllers.api.v1.car.list
+  controllers.api.v1.car.listByTrue
 );
 apiRouter.post(
   '/api/v1/cars',
@@ -37,16 +36,9 @@ apiRouter.get(
   controllers.api.v1.auth.authorize,
   controllers.api.v1.user.list
 );
-apiRouter.post(
-  '/api/v1/users',
-  controllers.api.v1.user.create
-);
-apiRouter.get(
-  '/api/v1/users/:id',
-  controllers.api.v1.user.getUser
-);
 apiRouter.delete(
   '/api/v1/users/:id',
+  controllers.api.v1.auth.authorize,
   controllers.api.v1.user.setUser,
   controllers.api.v1.user.destroy
 );

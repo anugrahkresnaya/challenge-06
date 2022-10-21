@@ -5,6 +5,12 @@ module.exports = {
     return Cars.findAll();
   },
 
+  findByAvailableIsTrue() {
+    return Cars.findAll({
+      where: { dataAvailable: true }
+    })
+  },
+
   create(body) {
     return Cars.create(body);
   },
@@ -19,6 +25,14 @@ module.exports = {
     return Cars.destroy({
       where: { id }
     });
+  },
+
+  softDelete(payload, id) {
+    return Cars.update(payload, { where: { id } })
+  },
+
+  getByPk(id) {
+    return Cars.findByPk(id);
   },
 
   getById(id) {
