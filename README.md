@@ -29,7 +29,7 @@ api-docs: http://localhost:8002/api-docs
   ```
 - set config for database
   ```
-  setting config.json
+  setting database.js
   sequelize db:create
   sequelize db:migrate
   sequelize db:seed:all
