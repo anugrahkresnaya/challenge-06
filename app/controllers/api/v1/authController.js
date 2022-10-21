@@ -61,7 +61,7 @@ module.exports = {
         if (isMember === "member") {
           res.status(401).json({
             status: "FAIL",
-            message: "Unauthorized because only super admin and admin can add admin"
+            message: "Unauthorized because only super admin and admin can add member"
           })
           return;
         }
