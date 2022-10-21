@@ -32,7 +32,7 @@ api-docs: http://localhost:8002/api-docs
   setting database.js
   sequelize db:create
   sequelize db:migrate
-  sequelize db:seed:all
+  sequelize db:seed
   ```
 - run the server
   ```
