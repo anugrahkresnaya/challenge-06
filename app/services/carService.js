@@ -19,8 +19,20 @@ module.exports = {
     return carRepository.update(reqBody, id);
   },
 
-  delete(payload, id) {
-    return carRepository.delete(payload, id);
+  async delete(id, payload) {
+    try {
+      let carId = await carRepository.getByPk(id);
+
+      if (carId === null) {
+        throw new Error('car not found');
+      } else {
+        await carRepository.update(payload, id)
+
+        return (car = await carRepository.delete(id))
+      }
+    } catch (err) {
+      throw err;
+    }
   },
 
   async softDelete(payload, id) {
