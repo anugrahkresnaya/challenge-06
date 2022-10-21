@@ -56,6 +56,16 @@ module.exports = {
     authService
       .registerMember(email, password, role)
       .then(user => {
+        const isMember = req.user.role
+
+        if (isMember === "member") {
+          res.status(401).json({
+            status: "FAIL",
+            message: "Unauthorized because only super admin and admin can add member"
+          })
+          return;
+        }
+
         res.status(201).json({
           status: "OK",
           data: user

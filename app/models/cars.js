@@ -17,10 +17,15 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     price: DataTypes.INTEGER,
     size: DataTypes.STRING,
-    image: DataTypes.STRING
+    image: DataTypes.STRING,
+    createdBy: DataTypes.INTEGER,
+    updatedBy: DataTypes.INTEGER,
+    deletedBy: DataTypes.INTEGER,
+    dataAvailable: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Cars',
+    paranoid: true
   });
   return Cars;
 };

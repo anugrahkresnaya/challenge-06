@@ -7,7 +7,24 @@ module.exports = {
       .then(cars => {
         res.status(200).json({
           status: "OK",
-          cars
+          data: cars
+        })
+      })
+      .catch(err => {
+        res.status(400).json({
+          status: "FAIL",
+          message: err.message
+        })
+      })
+  },
+
+  listByTrue(req, res) {
+    carService
+      .listByTrue()
+      .then(cars => {
+        res.status(200).json({
+          status: "OK",
+          data: cars
         })
       })
       .catch(err => {
@@ -19,14 +36,27 @@ module.exports = {
   },
 
   create(req, res) {
-    const body = req.body;
+    const isMember = req.user.role;
+
+    if (isMember === "member") {
+      res.status(401).json({
+        message: "This user doesn't has access to create car data"
+      })
+      return
+    };
+
+    const body = {
+      ...req.body,
+      createdBy: req.user.id,
+      dataAvailable: true
+    };
 
     carService
       .create(body)
       .then(car => {
         res.status(201).json({
           status: "created",
-          car
+          data: car
         })
       })
       .catch(err => {
@@ -39,14 +69,27 @@ module.exports = {
 
   update(req, res) {
     const id = req.params.id;
-    const body = req.body
+
+    const isMember = req.user.role;
+
+    if (isMember === "member") {
+      res.status(401).json({
+        message: "This user doesn't has access to update car data"
+      })
+      return
+    };
+
+    const body = {
+      ...req.body,
+      updatedBy: req.user.id,
+    };
 
     carService
       .update(body, id)
       .then(car => {
         res.status(200).json({
           status: "OK",
-          car
+          data: car
         })
       })
       .catch(err => {
@@ -60,8 +103,22 @@ module.exports = {
   destroy(req, res) {
     const id = req.params.id;
 
+    const isMember = req.user.role;
+
+    if (isMember === "member") {
+      res.status(401).json({
+        message: "This user doesn't has access to delete car data"
+      })
+      return
+    };
+
+    const payload = {
+      deletedBy: req.user.id,
+      dataAvailable: false
+    };
+
     carService
-      .delete(id)
+      .delete(id, payload)
       .then(() => {
         res.status(204).end()
       })

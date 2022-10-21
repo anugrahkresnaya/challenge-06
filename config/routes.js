@@ -1,31 +1,36 @@
 const express = require('express');
+const swaggerUI = require('swagger-ui-express');
 const controllers = require('../app/controllers');
+const appRouter = express.Router();
 const apiRouter = express.Router();
+const swgDoc = require('../openapi.json');
+
+// open api docs
+appRouter.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swgDoc));
 
 // cars router
 apiRouter.get(
   '/api/v1/cars',
-  controllers.api.v1.auth.authorize,
-  controllers.api.v1.car.list
+  controllers.api.v1.car.listByTrue
 );
 apiRouter.post(
-  '/api/v1/cars',
+  '/api/v1/car/add-car',
   controllers.api.v1.auth.authorize,
   controllers.api.v1.car.create
 );
 apiRouter.put(
-  '/api/v1/cars/:id',
+  '/api/v1/car/update-car/:id',
   controllers.api.v1.auth.authorize,
   controllers.api.v1.car.setCar,
   controllers.api.v1.car.update
 );
 apiRouter.get(
-  '/api/v1/cars/:id',
+  '/api/v1/car/search-car/:id',
   controllers.api.v1.auth.authorize,
   controllers.api.v1.car.getCar
 );
 apiRouter.delete(
-  '/api/v1/cars/:id',
+  '/api/v1/car/delete-car/:id',
   controllers.api.v1.auth.authorize,
   controllers.api.v1.car.setCar,
   controllers.api.v1.car.destroy
@@ -37,16 +42,9 @@ apiRouter.get(
   controllers.api.v1.auth.authorize,
   controllers.api.v1.user.list
 );
-apiRouter.post(
-  '/api/v1/users',
-  controllers.api.v1.user.create
-);
-apiRouter.get(
-  '/api/v1/users/:id',
-  controllers.api.v1.user.getUser
-);
 apiRouter.delete(
-  '/api/v1/users/:id',
+  '/api/v1/user/:id',
+  controllers.api.v1.auth.authorize,
   controllers.api.v1.user.setUser,
   controllers.api.v1.user.destroy
 );

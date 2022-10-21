@@ -1,0 +1,889 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Car Management API",
+    "description": "Car Management Rest API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "Optional server description, e.g. Main (production) server"
+    },
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "Optional server description, e.g. Internal staging server for testing"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Everything related about users"
+    },
+    {
+      "name": "Cars",
+      "description": "Everything related about cars"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Login Users (Member, Admin, Super Admin)",
+        "description": "Login for Users",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "superadmin@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "super123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "auth": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "superadmin@gmail.com"
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "$2e$10$v25of"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2022-10-20T14:27:32.828Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "example": "2022-10-20T14:27:32.828Z"
+                        },
+                        "token": {
+                          "type": "string",
+                          "example": "xxx"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User login fail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "FAIL"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User login fail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "FAIL"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email or password is incorrect"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register-admin": {
+      "post": {
+        "summary": "Create admin",
+        "description": "Registration for member",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "admintest10@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "admin123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 25
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "admin1@gmail.com"
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "admin123"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "admin"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2022-10-20T14:27:32.828Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "example": "2022-10-20T14:27:32.828Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed to create admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "FAIL"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "FAIL"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized because only super admin can add admin"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/register-member": {
+      "post": {
+        "summary": "Create member",
+        "description": "Registration for member",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "member11@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "member123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Register success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 26
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "member11@gmail.com"
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "member123"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "member"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2022-10-20T14:27:32.828Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "example": "2022-10-20T14:27:32.828Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed to create member",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "FAIL"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "FAIL"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized because only super admin and admin can add member"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars": {
+      "get": {
+        "summary": "Returns a list of cars",
+        "description": "List cars on dashboard",
+        "tags": [
+          "Cars"
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON array of cars",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 7
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "mobil jip"
+                          },
+                          "price": {
+                            "type": "integer",
+                            "example": 1000
+                          },
+                          "size": {
+                            "type": "string",
+                            "example": "Medium"
+                          },
+                          "image": {
+                            "type": "string",
+                            "example": "test image"
+                          },
+                          "createdBy": {
+                            "type": "integer",
+                            "example": 18
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "example": 18
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "example": "3"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2022-10-20T18:36:20.115Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2022-10-20T18:37:20.115Z"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "example": "2022-10-20T18:39:20.115Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "FAIL"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/car/add-car": {
+      "post": {
+        "summary": "Create car",
+        "description": "add car data to dashboard",
+        "tags": [
+          "Cars"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "mobil jip"
+                  },
+                  "price": {
+                    "type": "integer",
+                    "example": 1000
+                  },
+                  "size": {
+                    "type": "string",
+                    "example": "Medium"
+                  },
+                  "image": {
+                    "type": "string",
+                    "example": "test image"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "created"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 7
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "mobil jip"
+                          },
+                          "price": {
+                            "type": "integer",
+                            "example": 1000
+                          },
+                          "size": {
+                            "type": "string",
+                            "example": "Medium"
+                          },
+                          "image": {
+                            "type": "string",
+                            "example": "test image"
+                          },
+                          "createdBy": {
+                            "type": "integer",
+                            "example": 18
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "example": null
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "example": null
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2022-10-20T18:36:20.115Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2022-10-20T18:37:20.115Z"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "example": null
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User doesn't has access to create car",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "This user doesn't has access to create car data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/car/update-car/{id}": {
+      "put": {
+        "summary": "Update car by ID",
+        "description": "Update car data with car ID to find car data then update data",
+        "tags": [
+          "Cars"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Object cars",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "mobil jip"
+                  },
+                  "price": {
+                    "type": "integer",
+                    "example": 1000
+                  },
+                  "size": {
+                    "type": "string",
+                    "example": "Medium"
+                  },
+                  "image": {
+                    "type": "string",
+                    "example": "test image"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Data updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "This user doesn't has access to update car data"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "FAIL"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unprocessable entity"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/car/delete-car/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The car ID."
+        }
+      ],
+      "delete": {
+        "summary": "Delete car by ID",
+        "description": "Delete car data with car ID to find car data then delete data",
+        "tags": [
+          "Cars"
+        ],
+        "responses": {
+          "200": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Car delete successfully"
+                    },
+                    "data": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "This user doesn't has access to delete car data"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Failed to update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unprocessable entity"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/currentUser": {
+      "get": {
+        "summary": "Returns current user",
+        "description": "retrieve current user who is logged in",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON data of user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 26
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "member11@gmail.com"
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "$2a$10$v25of"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "member"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2022-10-20T14:27:32.828Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "example": "2022-10-20T14:27:32.828Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
