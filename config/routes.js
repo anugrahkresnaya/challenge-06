@@ -1,12 +1,11 @@
 const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 const controllers = require('../app/controllers');
-const appRouter = express.Router();
 const apiRouter = express.Router();
 const swgDoc = require('../openapi.json');
 
 // open api docs
-appRouter.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swgDoc));
+apiRouter.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swgDoc)); 
 
 // cars router
 apiRouter.get(
