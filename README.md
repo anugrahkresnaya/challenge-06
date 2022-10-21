@@ -18,9 +18,6 @@
 ## Link to Open API Docs
 api-docs: http://localhost:8002/api-docs
 
-## Endpoint to get Open API
-endpoint: http://localhost:8002/api-docs/api/v1
-
 ## Step to run
 - clone the repositories
   ```
