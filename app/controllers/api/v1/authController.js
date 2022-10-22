@@ -24,19 +24,18 @@ module.exports = {
   registerAdmin(req, res) {
     const { email, password, role } = req.body;
 
+    const isSuperAdmin = req.user.role;
+
+    if (isSuperAdmin !== "super admin") {
+      res.status(401).json({
+        status: "FAIL",
+        message: "Unauthorized because only super admin can add admin"
+      })
+      return;
+    }
     authService
       .registerAdmin(email, password, role)
       .then(user => {
-        const isSuperAdmin = req.user.role
-
-        if (isSuperAdmin !== "super admin") {
-          res.status(401).json({
-            status: "FAIL",
-            message: "Unauthorized because only super admin can add admin"
-          })
-          return;
-        }
-
         res.status(201).json({
           status: "OK",
           data: user
@@ -52,20 +51,18 @@ module.exports = {
 
   registerMember(req, res) {
     const { email, password, role } = req.body;
+    const isMember = req.user.role
 
+    if (isMember === "member") {
+      res.status(401).json({
+        status: "FAIL",
+        message: "Unauthorized because only super admin and admin can add member"
+      })
+      return;
+    }
     authService
       .registerMember(email, password, role)
       .then(user => {
-        const isMember = req.user.role
-
-        if (isMember === "member") {
-          res.status(401).json({
-            status: "FAIL",
-            message: "Unauthorized because only super admin and admin can add member"
-          })
-          return;
-        }
-
         res.status(201).json({
           status: "OK",
           data: user
